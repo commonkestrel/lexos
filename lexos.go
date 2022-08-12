@@ -24,28 +24,25 @@ const (
     ar_points = "#ctl00_ContentPlaceHolder1_ucBookDetail_lblPoints"
 )
 
-const (
-    InvalidISBN = "invalid isbn"
-    BrowserErr = "error opening browser"
-)
-
 var (
     pw *playwright.Playwright
     browser playwright.Browser
     page playwright.Page
+
+    InvalidISBN = errors.New("invalid isbn")
 )
 
 func Get(isbn string) (int, float64, float64, error) { //Returns Lexile, Atos, AR, and errors if any
     isbn = strings.ReplaceAll(isbn, "-", "")
     valid := isbnpkg.Validate(isbn)
     if !valid {
-        return -1, -1, -1, errors.New(InvalidISBN)
+        return -1, -1, -1, InvalidISBN
     }
 
     var err error
     pw, err = playwright.Run()
     if err != nil {
-        return -1, -1, -1, errors.New(BrowserErr)
+        return -1, -1, -1, err
     }
     defer pw.Stop()
 
@@ -53,13 +50,13 @@ func Get(isbn string) (int, float64, float64, error) { //Returns Lexile, Atos, A
 
     browser, err = pw.Chromium.Launch()
     if err != nil {
-        return -1, -1, -1, errors.New(BrowserErr)
+        return -1, -1, -1, err
     }
     defer browser.Close()
 
     page, err = browser.NewPage()
     if err != nil {
-        return -1, -1, -1, errors.New(BrowserErr)
+        return -1, -1, -1, err
     }
 
     atos, ar := atos(isbn)
