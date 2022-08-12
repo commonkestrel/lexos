@@ -35,7 +35,7 @@ var (
     page playwright.Page
 )
 
-func Get(isbn string) (int, float64, float64, error) {
+func Get(isbn string) (int, float64, float64, error) { //Returns Lexile, Atos, AR, and errors if any
     isbn = strings.ReplaceAll(isbn, "-", "")
     valid := isbnpkg.Validate(isbn)
     if !valid {
