@@ -49,6 +49,8 @@ func Get(isbn string) (int, float64, float64, error) { //Returns Lexile, Atos, A
     }
     defer pw.Stop()
 
+    Install()
+
     browser, err = pw.Chromium.Launch()
     if err != nil {
         return -1, -1, -1, errors.New(BrowserErr)
