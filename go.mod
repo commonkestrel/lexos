@@ -1,4 +1,4 @@
-module github.com/Jibble330/lexos
+module github.com/commonkestrel/lexos
 
 go 1.19
 
